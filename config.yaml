@@ -1,0 +1,64 @@
+#DATA
+data_root: /media/tjubme/F508AD7CCCADB296/gh/data/label
+classes: 2
+modality: dsa
+
+
+
+#MODEL
+arch: dedcgcnee
+in_chan: 1
+base_chan: 32
+conv_block: 'BasicBlock'
+conv_num: [2,0,0,0, 0,0,2,2]
+trans_num: [0,2,2,2, 2,2,0,0]
+num_heads: [1,4,8,16, 8,4,1,1]
+map_size: 3
+expansion: 2
+fusion_depth: 2
+fusion_dim: 512
+fusion_heads: 16
+proj_type: 'depthwise'
+attn_drop: 0
+proj_drop: 0
+
+resume: False
+aux_loss: True
+
+amp: True
+
+#TRAIN
+epochs: 20
+training_size: [512, 512]    # training crop size
+start_epoch: 0
+
+seed: 0
+k_fold: 5
+
+optimizer: adamw
+base_lr: 0.0001  # 0.001
+betas: [0.9, 0.999]
+weight_decay: 0.05  # weight decay of SGD optimizer
+weight: [0.5, 1]  # weitght of each class in the loss function
+rlt: 1 # relation between CE and Dice loss
+
+scale: 0.3  # scale for data augmentation
+rotate: 180 # rotation angle for data augmentation
+translate: 0
+gaussian_noise_std: 0.06
+additive_brightness_std: 0.8
+gamma_range: [0.5, 1.6]
+aug_device: gpu
+proc_idx: 0
+block: SingleConv
+
+#VALIDATION
+ema: True
+ema_alpha: 0.99
+
+
+#INFERENCE
+sliding_window: False
+print_freq: 20
+val_freq: 1000
+batch_size: 4
